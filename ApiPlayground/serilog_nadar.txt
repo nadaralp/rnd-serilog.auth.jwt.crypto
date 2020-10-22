@@ -1,0 +1,22 @@
+10/22/2020 14:56:15 insde @ GET api/playground
+10/22/2020 14:56:15 HTTP "GET" "/api/playground" responded 200 in 107.5539 ms
+10/22/2020 14:56:17 insde @ GET api/playground
+10/22/2020 14:56:17 HTTP "GET" "/api/playground" responded 200 in 3.0456 ms
+10/22/2020 14:56:17 insde @ GET api/playground
+10/22/2020 14:56:17 HTTP "GET" "/api/playground" responded 200 in 1.6002 ms
+10/22/2020 14:56:17 insde @ GET api/playground
+10/22/2020 14:56:17 HTTP "GET" "/api/playground" responded 200 in 3.7310 ms
+10/22/2020 14:56:18 insde @ GET api/playground
+10/22/2020 14:56:18 HTTP "GET" "/api/playground" responded 200 in 2.7847 ms
+10/22/2020 14:56:18 insde @ GET api/playground
+10/22/2020 14:56:18 HTTP "GET" "/api/playground" responded 200 in 2.3926 ms
+10/22/2020 14:56:18 Caught exception, rndNumber=3
+System.Exception: Exception of type 'System.Exception' was thrown.
+   at ApiPlayground.Controllers.PlaygroundController.Index() in D:\Learning\ApiMiddlewareTesting\ApiPlayground\Controllers\PlaygroundController.cs:line 35
+10/22/2020 14:56:18 insde @ GET api/playground
+10/22/2020 14:56:18 HTTP "GET" "/api/playground" responded 200 in 28.4354 ms
+10/22/2020 14:56:19 Caught exception, rndNumber=3
+System.Exception: Exception of type 'System.Exception' was thrown.
+   at ApiPlayground.Controllers.PlaygroundController.Index() in D:\Learning\ApiMiddlewareTesting\ApiPlayground\Controllers\PlaygroundController.cs:line 35
+10/22/2020 14:56:19 insde @ GET api/playground
+10/22/2020 14:56:19 HTTP "GET" "/api/playground" responded 200 in 2.3244 ms
