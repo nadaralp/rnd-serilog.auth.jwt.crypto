@@ -41,6 +41,9 @@ namespace ApiPlayground
             // This is using the Serilog logger. When we call ILogger<> we would have the serilog logger.
             Log.Information("Applications starting up");
             //Log.CloseAndFlush();
+
+
+            
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args)

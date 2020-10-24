@@ -2,6 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiPlayground.Infrastructure.Security.Hashing;
+using ApiPlayground.Infrastructure.Security.Policies;
+using ApiPlayground.Middlewares;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -27,7 +32,18 @@ namespace ApiPlayground
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+
+            //services.AddAuthentication(AuthenticationScheme)
+            services.AddSingleton<HashBuilder>();
+
+            services.AddSecurtyPolicies();
+            services.AddControllers()
+                .AddJsonOptions(configure =>
+                {
+                    configure.JsonSerializerOptions.PropertyNamingPolicy = null;
+                });
+
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,10 +62,17 @@ namespace ApiPlayground
 
             app.UseHttpsRedirection();
 
+            // Custom Middleware
+            app.UseMiddleware<AddPrincipalMiddleware>();
+
             // Will show the request for pages
             app.UseSerilogRequestLogging();
 
             app.UseRouting();
+
+            //app.UseCookiePolicy();
+
+            // app.UseAuthentication();
 
             app.UseAuthorization();
 

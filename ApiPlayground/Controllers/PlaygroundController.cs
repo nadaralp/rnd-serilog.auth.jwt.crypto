@@ -3,7 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using ApiPlayground.Infrastructure.Security.Policies;
+using ApiPlayground.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -11,16 +17,19 @@ namespace ApiPlayground.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PlaygroundController : ControllerBase
+    public class PlaygroundController : ControllerBaseExtended
     {
         // ILogger is an interface which means we can plug in any type of concrete logger as long as it implements ILogger<T>.
         // We can change that to use serialog
         private readonly ILogger<PlaygroundController> _logger;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private int rndNumber = new Random().Next(1, 5);
 
-        public PlaygroundController(ILogger<PlaygroundController> logger)
+        public PlaygroundController(
+            ILogger<PlaygroundController> logger, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
         }
 
 
@@ -41,11 +50,22 @@ namespace ApiPlayground.Controllers
                 }
             }
 
-            _logger.LogInformation("insde @ GET api/playground");
+            UserPrincipal userPrincipal = GetUserPrincipal();
+            _logger.LogDebug("user Principal = {@userPrincipal}", userPrincipal);
+
             return new
             {
-                name = "Unknown"
+                name = userPrincipal?.Name ?? "Name wasn't found"
             };
+        }
+
+
+        [HttpGet("age")]
+        //[Authorize(Policy = PolicyNames.AgeOver18)]
+        public dynamic AuthorizeAgeOver18()
+        {
+            ClaimsPrincipal user = User;
+            return "Authorized successfully";
         }
 
     }
