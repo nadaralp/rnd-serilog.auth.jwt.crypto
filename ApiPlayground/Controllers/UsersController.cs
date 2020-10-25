@@ -1,5 +1,6 @@
 ﻿using ApiPlayground.Infrastructure;
 using ApiPlayground.InMemoryCache;
+using ApiPlayground.Models;
 using ApiPlayground.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;

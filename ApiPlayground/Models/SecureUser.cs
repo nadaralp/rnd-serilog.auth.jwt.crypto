@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApiPlayground.InMemoryCache
+namespace ApiPlayground.Models
 {
     public class SecureUser
     {

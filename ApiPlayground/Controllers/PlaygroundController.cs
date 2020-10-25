@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using ApiPlayground.Infrastructure.Security.Policies;
 using ApiPlayground.Models;
+using ClassLibrary1;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
@@ -23,13 +24,15 @@ namespace ApiPlayground.Controllers
         // We can change that to use serialog
         private readonly ILogger<PlaygroundController> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly Service1 _service1;
         private int rndNumber = new Random().Next(1, 5);
 
         public PlaygroundController(
-            ILogger<PlaygroundController> logger, IHttpContextAccessor httpContextAccessor)
+            ILogger<PlaygroundController> logger, IHttpContextAccessor httpContextAccessor, Service1 service1)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
+            _service1 = service1;
         }
 
 
@@ -67,6 +70,13 @@ namespace ApiPlayground.Controllers
             ClaimsPrincipal user = User;
             return "Authorized successfully";
         }
+
+
+
+        [HttpGet("service1")]
+        public string DemoForAmit()
+        =>
+            _service1.CallService2PrintFromService1();
 
     }
 }

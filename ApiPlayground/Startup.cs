@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiPlayground.Infrastructure.Options;
 using ApiPlayground.Infrastructure.Security.Hashing;
+using ApiPlayground.Infrastructure.Security.Jwt;
 using ApiPlayground.Infrastructure.Security.Policies;
 using ApiPlayground.InMemoryCache;
 using ApiPlayground.Middlewares;
 using ApiPlayground.Services;
+using ClassLibrary1;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -35,13 +38,20 @@ namespace ApiPlayground
         public void ConfigureServices(IServiceCollection services)
         {
 
+
+            services.AddAssemblyOptions(Configuration);
+
             //services.AddAuthentication(AuthenticationScheme)
             services.AddMemoryCache();
+
+            // Service 1 dependencies
+            services.AddClassLibrary1DIConfiguration();
 
 
             services.AddSingleton<SeedUsers>();
             services.AddSingleton<HashBuilder>();
             services.AddSingleton<SaltGenerator>();
+            services.AddSingleton<JwtTokenService>();
             services.AddScoped<IUserService, InMemoryUserService>();
 
             services.AddSecurtyPolicies();

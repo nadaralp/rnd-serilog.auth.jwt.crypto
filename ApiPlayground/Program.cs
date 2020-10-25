@@ -43,7 +43,7 @@ namespace ApiPlayground
             //Log.CloseAndFlush();
 
 
-            
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args)

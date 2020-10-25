@@ -1,10 +1,14 @@
 ﻿using ApiPlayground.Infrastructure;
+using ApiPlayground.Infrastructure.Exceptions.User;
 using ApiPlayground.Infrastructure.Security.Hashing;
 using ApiPlayground.InMemoryCache;
+using ApiPlayground.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace ApiPlayground.Services
@@ -42,7 +46,7 @@ namespace ApiPlayground.Services
                 _logger.LogInformation("users are null {@users}", users);
                 users = _seedUsers.GetSecureUsers();
             }
-                
+
 
             string userSalt = _saltGenerator.GenerateSalt();
             //SecureUser newSecureUser = _userSecurityService.CreateSecureUser(user);
@@ -56,10 +60,17 @@ namespace ApiPlayground.Services
             users.Add(newSecureUser);
             _memoryCache.Set(CacheKeys.UserData, users);
 
-            return 
+            return
                 Task.FromResult(
                     Response.OkResponse(newSecureUser, "User was added successfully")
                 );
+        }
+
+
+        public async Task<SecureUser> GetUserByName(string name)
+        {
+            ICollection<SecureUser> secureUsers = await GetUsers();
+            return secureUsers.FirstOrDefault(u => string.Equals(name, u.Name));
         }
 
 
@@ -73,6 +84,32 @@ namespace ApiPlayground.Services
             });
 
             return Task.FromResult(secureUsers);
+        }
+
+
+        public async Task<SecureUser> ValidateCredentialsAndGetUser(User user)
+        {
+            return null;
+            // Query for user's salt
+            var secureUserByName = await GetUserByName(user.Name); // we need the salt to compare passwords
+            if (secureUserByName is null)
+            {
+                _logger.LogInformation("{@user} - user name doesn't exists in records. Was requested to match for salt on login.", user);
+                throw new InvalidUserCredentialsException();
+            }
+
+            // Built users password
+            //_passwordService.GeneratePassword(user.Password, secureUserByName.Salt);
+
+            // hmac sha password
+            // match the database
+
+            if (!_memoryCache.TryGetValue(CacheKeys.UserData, out ICollection<SecureUser> secureUsers))
+            {
+                secureUsers = _seedUsers.GetSecureUsers();
+            }
+
+
         }
     }
 }

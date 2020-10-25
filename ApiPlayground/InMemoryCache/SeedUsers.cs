@@ -1,4 +1,5 @@
 ﻿using ApiPlayground.Infrastructure.Security.Hashing;
+using ApiPlayground.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

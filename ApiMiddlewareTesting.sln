@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiPlayground", "ApiPlayground\ApiPlayground.csproj", "{7597EC0E-5E2C-4C69-B542-41B21E4FE5E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiPlayground", "ApiPlayground\ApiPlayground.csproj", "{7597EC0E-5E2C-4C69-B542-41B21E4FE5E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "ClassLibrary1\ClassLibrary1.csproj", "{672EC2C9-0882-4066-93C7-C3B9F6B2D5E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7597EC0E-5E2C-4C69-B542-41B21E4FE5E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7597EC0E-5E2C-4C69-B542-41B21E4FE5E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7597EC0E-5E2C-4C69-B542-41B21E4FE5E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{672EC2C9-0882-4066-93C7-C3B9F6B2D5E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{672EC2C9-0882-4066-93C7-C3B9F6B2D5E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{672EC2C9-0882-4066-93C7-C3B9F6B2D5E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{672EC2C9-0882-4066-93C7-C3B9F6B2D5E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
