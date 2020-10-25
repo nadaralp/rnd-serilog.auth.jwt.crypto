@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApiPlayground.Infrastructure.Security.Hashing;
 using ApiPlayground.Infrastructure.Security.Policies;
+using ApiPlayground.InMemoryCache;
 using ApiPlayground.Middlewares;
+using ApiPlayground.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -34,7 +36,13 @@ namespace ApiPlayground
         {
 
             //services.AddAuthentication(AuthenticationScheme)
+            services.AddMemoryCache();
+
+
+            services.AddSingleton<SeedUsers>();
             services.AddSingleton<HashBuilder>();
+            services.AddSingleton<SaltGenerator>();
+            services.AddScoped<IUserService, InMemoryUserService>();
 
             services.AddSecurtyPolicies();
             services.AddControllers()

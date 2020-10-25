@@ -9,7 +9,7 @@ namespace ApiPlayground.Infrastructure.Security.Hashing
 {
     public class SaltGenerator
     {
-        public byte[] GenerateSalt()
+        public string GenerateSalt()
         {
             // generate a 128-bit salt using a secure PRNG
             byte[] salt = new byte[128 / 8];
@@ -18,7 +18,7 @@ namespace ApiPlayground.Infrastructure.Security.Hashing
                 rng.GetBytes(salt);
             }
 
-            return salt;
+            return salt.AsHexString();
         }
     }
 }

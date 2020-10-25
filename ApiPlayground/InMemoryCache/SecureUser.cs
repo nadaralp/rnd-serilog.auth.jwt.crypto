@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ApiPlayground.InMemoryCache
 {
-    public class UserSecure
+    public class SecureUser
     {
         public string Name { get; set; }
         public string Salt { get; set; }
