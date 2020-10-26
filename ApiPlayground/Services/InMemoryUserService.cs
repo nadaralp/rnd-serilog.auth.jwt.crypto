@@ -4,6 +4,7 @@ using ApiPlayground.Infrastructure.Security.Hashing;
 using ApiPlayground.InMemoryCache;
 using ApiPlayground.Models;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace ApiPlayground.Services
         private readonly PasswordService _passwordService;
 
         public InMemoryUserService(
+            IServiceProvider serviceProvider,
             IMemoryCache memoryCache,
             SeedUsers seedUsers,
             SaltGenerator saltGenerator,
@@ -36,6 +38,11 @@ namespace ApiPlayground.Services
             _hashBuilder = hashBuilder;
             _logger = logger;
             _passwordService = passwordService;
+
+
+            // Use this when the dependency is not frequently used
+            _saltGenerator = serviceProvider.GetRequiredService<SaltGenerator>();
+
         }
 
 
@@ -100,7 +107,7 @@ namespace ApiPlayground.Services
             }
 
             string password = _passwordService.GeneratePassword(user.Password, secureUserByName.Salt);
-            if(string.Equals(password, secureUserByName.Password))
+            if (string.Equals(password, secureUserByName.Password))
             {
                 return true;
             }

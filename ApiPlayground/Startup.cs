@@ -1,4 +1,6 @@
+using ApiPlayground.Infrastructure;
 using ApiPlayground.Infrastructure.Options;
+using ApiPlayground.Infrastructure.Security.Encryption;
 using ApiPlayground.Infrastructure.Security.Hashing;
 using ApiPlayground.Infrastructure.Security.Jwt;
 using ApiPlayground.Infrastructure.Security.Policies;
@@ -11,7 +13,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MvcModule.Models;
 using Serilog;
+using System;
+using System.Reflection;
 
 namespace ApiPlayground
 {
@@ -42,12 +47,18 @@ namespace ApiPlayground
             services.AddSingleton<HashBuilder>();
             services.AddSingleton<SaltGenerator>();
             services.AddSingleton<PasswordService>();
+            services.AddSingleton<Encryptor>();
             services.AddSingleton<ITokenService, JwtTokenService>();
             services.AddSingleton<IUserService, InMemoryUserService>();
             services.AddSingleton<IAuthenticationService, AuthenticationService>();
 
+
+            var type = Type.GetType("ApiPlayground.Startup");
+
             services.AddSecurtyPolicies();
             services.AddControllers()
+                //.AddApplicationPart(typeof(Pet).Assembly)
+                .AddAllDomainApplicationParts()
                 .AddJsonOptions(configure =>
                 {
                     configure.JsonSerializerOptions.PropertyNamingPolicy = null;
