@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ApiPlayground.Infrastructure.Exceptions.User
 {
-    public class InvalidUserCredentialsException : Exception
+    public class InvalidUserCredentialsException : ExceptionExtended
     {
 
     }

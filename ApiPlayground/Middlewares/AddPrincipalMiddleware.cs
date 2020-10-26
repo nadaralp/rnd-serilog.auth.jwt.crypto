@@ -36,6 +36,9 @@ namespace ApiPlayground.Middlewares
                 ClaimsIdentity authorizedUserClaim = CreateClaimsIdentity();
                 AddIdentityToUserInContext(context, authorizedUserClaim);
                 await _next(context);
+
+                // Test to see back tracking of middleware
+                //await TerminatePipeline(context);
             }
 
         }
@@ -44,11 +47,8 @@ namespace ApiPlayground.Middlewares
         private async Task TerminatePipeline(HttpContext context)
         {
             HttpRequest request = context.Request;
-            if (request.Query.ContainsKey("terminate"))
-            {
-                _logger.LogInformation("Terminates inside {Class}, because termination parameter was specified", nameof(AddPrincipalMiddleware));
-                await context.Response.WriteAsync("Rotue is hijacked because of terminate query");
-            }
+            _logger.LogInformation("Terminates inside {Class}, because termination parameter was specified", nameof(AddPrincipalMiddleware));
+            await context.Response.WriteAsync("Rotue is hijacked because of terminate query");
         }
 
         private ClaimsIdentity CreateClaimsIdentity()

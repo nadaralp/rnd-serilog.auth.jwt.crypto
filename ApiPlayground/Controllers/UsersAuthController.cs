@@ -1,4 +1,5 @@
 ﻿using ApiPlayground.Infrastructure;
+using ApiPlayground.Infrastructure.Exceptions;
 using ApiPlayground.Models;
 using ApiPlayground.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -27,12 +28,18 @@ namespace ApiPlayground.Controllers
         [HttpPost]
         public async Task<ActionResult<Response<string>>> SignIn(User user)
         {
-            string JWT = await _authenticationService.ChallengeUserAndReturnJwt(user);
-            if (string.IsNullOrEmpty(JWT))
-                return BadRequest("Unable to authenticated, check your credentials.");
+            try
+            {
+                string JWT = await _authenticationService.ChallengeUserAndReturnJwt(user);
+                if (string.IsNullOrEmpty(JWT))
+                    return BadRequest("Unable to authenticated, check your credentials.");
 
-            return Infrastructure.Response.OkResponse(JWT, "Jwt was created successfully.");
-
+                return Infrastructure.Response.OkResponse(JWT, "Jwt was created successfully.");
+            }
+            catch (ExceptionExtended e)
+            {
+                return BadRequest(e.GetMessageAndStackTraceInformation);
+            }
         }
     }
 }

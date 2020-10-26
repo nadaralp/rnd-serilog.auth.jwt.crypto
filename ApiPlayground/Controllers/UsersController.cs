@@ -32,7 +32,7 @@ namespace ApiPlayground.Controllers
         [HttpGet]
         public async Task<ICollection<SecureUser>> GetSecureUser()
         {
-            var secureUsers = await _userService.GetUsers();
+            var secureUsers = await _userService.GetUsersAsync();
             return secureUsers;
         }
 
@@ -40,7 +40,7 @@ namespace ApiPlayground.Controllers
         [HttpPost]
         public async Task<Response<SecureUser>> CreateUser(User user)
         {
-            return await _userService.CreateUser(user);
+            return await _userService.CreateUserAsync(user);
 
         }
     }
