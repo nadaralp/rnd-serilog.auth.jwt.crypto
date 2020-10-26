@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ApiPlayground.Services
@@ -20,24 +20,27 @@ namespace ApiPlayground.Services
         private readonly SaltGenerator _saltGenerator;
         private readonly HashBuilder _hashBuilder;
         private readonly ILogger<InMemoryUserService> _logger;
+        private readonly PasswordService _passwordService;
 
         public InMemoryUserService(
             IMemoryCache memoryCache,
             SeedUsers seedUsers,
             SaltGenerator saltGenerator,
             HashBuilder hashBuilder,
-            ILogger<InMemoryUserService> logger)
+            ILogger<InMemoryUserService> logger,
+            PasswordService passwordService)
         {
             _memoryCache = memoryCache;
             _seedUsers = seedUsers;
             _saltGenerator = saltGenerator;
             _hashBuilder = hashBuilder;
             _logger = logger;
+            _passwordService = passwordService;
         }
 
 
 
-        public Task<Response<SecureUser>> CreateUser(User user)
+        public Task<Response<SecureUser>> CreateUserAsync(User user)
         {
             _memoryCache.TryGetValue(CacheKeys.UserData, out ICollection<SecureUser> users);
             _logger.LogInformation("users data={@users}", users);
@@ -54,7 +57,7 @@ namespace ApiPlayground.Services
             {
                 Name = user.Name,
                 Salt = userSalt,
-                Password = _hashBuilder.Sha256(user.Password, userSalt)
+                Password = _passwordService.GeneratePassword(user.Name, userSalt)
             };
 
             users.Add(newSecureUser);
@@ -66,15 +69,14 @@ namespace ApiPlayground.Services
                 );
         }
 
-
-        public async Task<SecureUser> GetUserByName(string name)
+        public async Task<SecureUser> GetUserByNameAsync(string name)
         {
-            ICollection<SecureUser> secureUsers = await GetUsers();
+            ICollection<SecureUser> secureUsers = await GetUsersAsync();
             return secureUsers.FirstOrDefault(u => string.Equals(name, u.Name));
         }
 
 
-        public Task<ICollection<SecureUser>> GetUsers()
+        public Task<ICollection<SecureUser>> GetUsersAsync()
         {
             ICollection<SecureUser> secureUsers = _memoryCache.GetOrCreate(CacheKeys.UserData, entry =>
             {
@@ -87,29 +89,35 @@ namespace ApiPlayground.Services
         }
 
 
-        public async Task<SecureUser> ValidateCredentialsAndGetUser(User user)
+        public async Task<bool> IsUserCredentialsValidAsync(User user)
         {
-            return null;
             // Query for user's salt
-            var secureUserByName = await GetUserByName(user.Name); // we need the salt to compare passwords
+            var secureUserByName = await GetUserByNameAsync(user.Name); // we need the salt to compare passwords
             if (secureUserByName is null)
             {
                 _logger.LogInformation("{@user} - user name doesn't exists in records. Was requested to match for salt on login.", user);
                 throw new InvalidUserCredentialsException();
             }
 
-            // Built users password
-            //_passwordService.GeneratePassword(user.Password, secureUserByName.Salt);
-
-            // hmac sha password
-            // match the database
-
-            if (!_memoryCache.TryGetValue(CacheKeys.UserData, out ICollection<SecureUser> secureUsers))
+            string password = _passwordService.GeneratePassword(user.Password, secureUserByName.Salt);
+            if(string.Equals(password, secureUserByName.Password))
             {
-                secureUsers = _seedUsers.GetSecureUsers();
+                return true;
             }
 
+            return false;
+        }
 
+
+        public ICollection<Claim> GenerateClaimsForUser(SecureUser secureUser)
+        {
+            List<Claim> claims = new List<Claim>();
+            Claim nameClaim = new Claim(ClaimTypes.Name, secureUser.Name);
+
+            // Adding the claims
+            claims.Add(nameClaim);
+
+            return claims;
         }
     }
 }

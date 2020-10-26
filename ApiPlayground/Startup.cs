@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ApiPlayground.Infrastructure.Options;
 using ApiPlayground.Infrastructure.Security.Hashing;
 using ApiPlayground.Infrastructure.Security.Jwt;
@@ -10,17 +6,11 @@ using ApiPlayground.InMemoryCache;
 using ApiPlayground.Middlewares;
 using ApiPlayground.Services;
 using ClassLibrary1;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
 
 namespace ApiPlayground
@@ -51,8 +41,10 @@ namespace ApiPlayground
             services.AddSingleton<SeedUsers>();
             services.AddSingleton<HashBuilder>();
             services.AddSingleton<SaltGenerator>();
-            services.AddSingleton<JwtTokenService>();
-            services.AddScoped<IUserService, InMemoryUserService>();
+            services.AddSingleton<PasswordService>();
+            services.AddSingleton<ITokenService, JwtTokenService>();
+            services.AddSingleton<IUserService, InMemoryUserService>();
+            services.AddSingleton<IAuthenticationService, AuthenticationService>();
 
             services.AddSecurtyPolicies();
             services.AddControllers()

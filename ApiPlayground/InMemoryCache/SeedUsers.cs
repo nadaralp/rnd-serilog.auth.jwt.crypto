@@ -1,5 +1,6 @@
 ﻿using ApiPlayground.Infrastructure.Security.Hashing;
 using ApiPlayground.Models;
+using ApiPlayground.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,12 @@ namespace ApiPlayground.InMemoryCache
     public class SeedUsers
     {
         private readonly SaltGenerator _saltGenerator;
-        private readonly HashBuilder _hashBuilder;
+        private readonly PasswordService _passwordService;
 
-        public SeedUsers(SaltGenerator saltGenerator, HashBuilder hashBuilder)
+        public SeedUsers(SaltGenerator saltGenerator, PasswordService passwordService)
         {
             _saltGenerator = saltGenerator;
-            _hashBuilder = hashBuilder;
+            _passwordService = passwordService;
         }
 
 
@@ -54,7 +55,7 @@ namespace ApiPlayground.InMemoryCache
                 {
                     Name = user.Name,
                     Salt = userSalt,
-                    Password = _hashBuilder.Sha256(user.Password + userSalt)
+                    Password = _passwordService.GeneratePassword(user.Password, userSalt)
                 };
 
                 secureUsers.Add(secureUser);

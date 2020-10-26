@@ -13,7 +13,7 @@ namespace ApiPlayground.Infrastructure.Security.Hashing
         {
             // generate a 128-bit salt using a secure PRNG
             byte[] salt = new byte[128 / 8];
-            using(var rng = RandomNumberGenerator.Create())
+            using(RandomNumberGenerator rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(salt);
             }
