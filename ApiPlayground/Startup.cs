@@ -39,6 +39,10 @@ namespace ApiPlayground
             //services.AddAuthentication(AuthenticationScheme)
             services.AddMemoryCache();
 
+
+            // Adds all dll modules configuration
+            services.AddAllModuleLayers(Configuration);
+
             // Service 1 dependencies
             services.AddClassLibrary1DIConfiguration();
 
@@ -53,7 +57,7 @@ namespace ApiPlayground
             services.AddSingleton<IAuthenticationService, AuthenticationService>();
 
 
-            var type = Type.GetType("ApiPlayground.Startup");
+            //var type = Type.GetType("ApiPlayground.Startup");
 
             services.AddSecurtyPolicies();
             services.AddControllers()

@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Api.Aws\Api.Aws.csproj" />
     <ProjectReference Include="..\ClassLibrary1\ClassLibrary1.csproj" />
     <ProjectReference Include="..\MvcModule\MvcModule.csproj" />
     <ProjectReference Include="..\Playground.Core\Playground.Core.csproj" />
