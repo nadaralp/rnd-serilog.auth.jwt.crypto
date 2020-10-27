@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace ApiPlayground.Controllers
@@ -25,14 +26,19 @@ namespace ApiPlayground.Controllers
         private readonly ILogger<PlaygroundController> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly Service1 _service1;
+        private readonly IConfiguration _configuration;
         private int rndNumber = new Random().Next(1, 5);
 
         public PlaygroundController(
-            ILogger<PlaygroundController> logger, IHttpContextAccessor httpContextAccessor, Service1 service1)
+            ILogger<PlaygroundController> logger,
+            IHttpContextAccessor httpContextAccessor,
+            Service1 service1,
+            IConfiguration configuration)
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _service1 = service1;
+            _configuration = configuration;
         }
 
 
@@ -77,6 +83,14 @@ namespace ApiPlayground.Controllers
         public string DemoForAmit()
         =>
             _service1.CallService2PrintFromService1();
+
+        [HttpGet("environments")]
+        public string EnvironmentVariables()
+        {
+            // order of env variables:
+            // appsettings.json -> {environment}.appsettings.json -> secrets.json -> environment variables
+            return _configuration.GetSection("EnvDemo:Nested1:Name").Value ?? "Not found";
+        }
 
     }
 }
