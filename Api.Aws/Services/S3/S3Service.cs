@@ -2,12 +2,10 @@
 using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,6 +31,8 @@ namespace Api.Aws.Services.S3
             var watch = Stopwatch.StartNew();
             try
             {
+                await _amazonS3.EnsureBucketExistsAsync(bucketName);
+
                 _logger.LogInformation("executing thread={thread}", Thread.CurrentThread.ManagedThreadId);
                 Stream imageStream = formFile.OpenReadStream();
                 PutObjectRequest putObject = new PutObjectRequest

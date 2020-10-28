@@ -22,7 +22,6 @@ namespace ApiPlayground.Middlewares
             _logger = logger;
         }
 
-
         public async Task InvokeAsync(HttpContext context)
         {
             _logger.LogDebug($"Inside {nameof(AddPrincipalMiddleware)}");
@@ -40,9 +39,7 @@ namespace ApiPlayground.Middlewares
                 // Test to see back tracking of middleware
                 //await TerminatePipeline(context);
             }
-
         }
-
 
         private async Task TerminatePipeline(HttpContext context)
         {
@@ -53,8 +50,6 @@ namespace ApiPlayground.Middlewares
 
         private ClaimsIdentity CreateClaimsIdentity()
         {
-
-
             Claim[] claims = new Claim[2];
             Claim firstClaim = new Claim("customType", "NadarAlpenidzeAuthenticated");
             claims[0] = firstClaim;
@@ -67,11 +62,10 @@ namespace ApiPlayground.Middlewares
             return authorizedUserClaim;
         }
 
-
         private void AddIdentityToUserInContext(HttpContext context, ClaimsIdentity authorizedUserClaim)
         {
             context.User.AddIdentity(authorizedUserClaim);
-            _logger.LogInformation("Added identity to request pipeline {@claimsIdentity}", authorizedUserClaim);
+            _logger.LogDebug("Added identity to request pipeline {@claimsIdentity}", authorizedUserClaim);
         }
     }
 }

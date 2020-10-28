@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using ApiPlayground.Infrastructure.Security.Policies;
-using ApiPlayground.Models;
+﻿using ApiPlayground.Models;
 using ClassLibrary1;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Security.Claims;
 
 namespace ApiPlayground.Controllers
 {
@@ -24,6 +16,7 @@ namespace ApiPlayground.Controllers
         // ILogger is an interface which means we can plug in any type of concrete logger as long as it implements ILogger<T>.
         // We can change that to use serialog
         private readonly ILogger<PlaygroundController> _logger;
+
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly Service1 _service1;
         private readonly IConfiguration _configuration;
@@ -41,11 +34,9 @@ namespace ApiPlayground.Controllers
             _configuration = configuration;
         }
 
-
         [HttpGet]
         public object Index()
         {
-
             if (rndNumber == 3)
             {
                 try
@@ -68,7 +59,6 @@ namespace ApiPlayground.Controllers
             };
         }
 
-
         [HttpGet("age")]
         //[Authorize(Policy = PolicyNames.AgeOver18)]
         public dynamic AuthorizeAgeOver18()
@@ -76,8 +66,6 @@ namespace ApiPlayground.Controllers
             ClaimsPrincipal user = User;
             return "Authorized successfully";
         }
-
-
 
         [HttpGet("service1")]
         public string DemoForAmit()
@@ -91,6 +79,5 @@ namespace ApiPlayground.Controllers
             // appsettings.json -> {environment}.appsettings.json -> secrets.json -> environment variables
             return _configuration.GetSection("EnvDemo:Nested1:Name").Value ?? "Not found";
         }
-
     }
 }
