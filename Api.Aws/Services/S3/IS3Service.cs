@@ -10,5 +10,7 @@ namespace Api.Aws.Services.S3
     public interface IS3Service
     {
         Task UploadFileAsync(IFormFile formFile, string bucketName);
+
+        Task UploadFilesInBatchAsync(IFormFileCollection formFiles, string bucketName);
     }
 }

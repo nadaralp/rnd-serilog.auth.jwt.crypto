@@ -4,11 +4,6 @@ using Api.Aws.Services.S3;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Playground.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Api.Aws
 {
@@ -18,15 +13,15 @@ namespace Api.Aws
         {
             #region Aws Client Singleton Register
 
+            string accessKey = configuration.GetSection("AWS_ACCOUNT:ACCESS_KEY")?.Value;
+            string securityKey = configuration.GetSection("AWS_ACCOUNT:SECRET_KEY")?.Value;
 
-            //string accessKey = configuration.GetSection("AwsCredentials:User:AccessKeyId")?.Value;
-            //string securityKey = configuration.GetSection("AwsCredentials:User:SecretKey")?.Value;
+            AmazonS3Client s3Client = new AmazonS3Client(accessKey, securityKey, RegionEndpoint.EUCentral1);
+            services.AddSingleton<IAmazonS3>(s3Client);
 
-            //AmazonS3Client s3Client = new AmazonS3Client(accessKey, securityKey, RegionEndpoint.EUCentral1);
-            //services.AddSingleton<IAmazonS3>(s3Client);
-            #endregion
+            #endregion Aws Client Singleton Register
 
-            //services.AddSingleton<IS3Service, S3Service>();
+            services.AddSingleton<S3Service>();
         }
     }
 }
